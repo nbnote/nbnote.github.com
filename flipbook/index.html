@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Flipbook.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="container-narrow">
+
+    <div class="masthead">
+        <h1 class="muted">Flipbook.js&nbsp;&nbsp;<span class="label" id="version">version: 1.1.4</span></h1>
+    </div>
+
+    <hr>
+
+    <div class="hero-unit">
+
+        <div id="screen"></div>
+
+        <div id="frameNumber">Frame Number : <span class="badge badge-info" id="currentFrame">0</span></div>
+
+        <div id="control">
+            <ul id="btns" class="clearfix">
+                <li><img src="img/ui_pat1_off.png" alt="" id="pat1Btn"></li>
+                <li><img src="img/ui_pat2_off.png" alt="" id="pat2Btn"></li>
+                <li><img src="img/ui_pat3_off.png" alt="" id="pat3Btn"></li>
+                <li><img src="img/ui_reverse_off.png" alt="" id="reverseBtn"></li>
+                <li><img src="img/ui_stop_off.png" alt="" id="stopBtn"></li>
+                <li><img src="img/ui_pause_off.png" alt="" id="pauseBtn"></li>
+                <li><img src="img/ui_play_off.png" alt="" id="playBtn"></li>
+            </ul>
+            <div id="loop"><img src="img/ui_loop_knob.png" id="knob"></div>
+        </div>
+
+    </div>
+
+    <div class="tabbable">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#download" data-toggle="tab">ダウンロード</a></li>
+            <li><a href="#intro" data-toggle="tab">説明</a></li>
+            <li><a href="#usage" data-toggle="tab">使い方</a></li>
+            <li><a href="#setget" data-toggle="tab">セッター/ゲッター</a></li>
+            <li><a href="#methods" data-toggle="tab">メソッド</a></li>
+            <li><a href="#events" data-toggle="tab">イベント</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="download">
+                <h2>ダウンロード</h2>
+                <a class="btn btn-large btn-primary" href="js/flipbook.min.js"><i class="icon-download icon-white"></i> 圧縮版ダウンロード</a>
+                <a class="btn btn-large" href="js/flipbook.js"><i class="icon-download"></i> 非圧縮版ダウンロード</a>
+            </div>
+
+            <div class="tab-pane" id="intro">
+                <h2>説明</h2>
+                <p>
+                    スプライトシートでパラパラマンガ的にアニメーションするためのシンプルなスクリプトです。
+                </p>
+            </div>
+
+            <div class="tab-pane" id="usage">
+                <h2>使い方</h2>
+                <h3>HTML</h3>
+                <p>
+                    flipbook.jsのパスを読み込んでおき、対象となる要素を記述。適当なid等を付与しておきます。
+                </p>
+
+<pre class="prettyprint linenums">
+&lt;body&gt;
+
+&lt;!-- 対象の要素 --&gt;
+&lt;div id="screen"&gt;&lt;/div&gt;
+
+&lt;!-- flipbook.js を読み込み --&gt;
+&lt;script src="flipbook.js"&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+</pre>
+
+                <h3>CSS</h3>
+                <p>
+                    対象要素に幅、高さ、背景画像(スプライトシート)を設定しておきます。
+                </p>
+
+<pre class="prettyprint linenums">
+#screen {
+width; 300px;
+height: 200px;
+background: url(../img/spritesheet.png) 0 0 no-repeat;
+}
+</pre>
+
+                <h3 id="hoge">JavaScript</h3>
+                <p>
+                    Flipbookのインスタンスを作成、必要に応じてイベントハンドラなどを設定し、play()で再生します。<br>
+                    コンストラクタの第一引数にidを指定する場合、初期化時点でFlipbookが確実にその要素を取得できるよう、そのタイミングを考慮する必要があります。(DOM Ready、etc.)
+                </p>
+
+                <h4>Flipbook( target:*, totalFrames:Integer, direction:Integer )</h4>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>target:*</th>
+                        <td>必須。対象要素のid:String、または要素:Element</td>
+                    </tr>
+                    <tr>
+                        <th>totalFrames:Integer</th>
+                        <td>必須。総フレーム数</td>
+                    </tr>
+                    <tr>
+                        <th>direction:Integer</th>
+                        <td>任意、デフォルト:0。1フレームごとにスプライトシートをずらしていく方向( 0=左 : 1=上 )</td>
+                    </tr>
+                </table>
+
+<pre class="prettyprint linenums">
+jQuery(function($){ // DOM Ready
+
+// 新しいFlipbookインスタンスを作成
+var flipbook = new Flipbook( 'screen', 20 );
+
+// 任意でイベントハンドラなどを設定
+flipbook.onLastFrame = function(){
+    console.log( '最終フレームに到達しました' );
+}
+
+// 再生
+flipbook.play();
+
+});
+</pre>
+
+            </div>
+
+            <div class="tab-pane" id="setget">
+
+                <h2>セッター/ゲッター</h2>
+
+                <h3>getSpeed():Integer</h3>
+                <p>現在設定されているアニメーションの早さ(時間隔)をミリ秒で返します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Default</th>
+                        <td>33</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.getSpeed(); // 33
+</pre>
+
+                <h3>setSpeed( milliSecond:Integer )</h3>
+                <p>アニメーションの早さ(時間隔)をミリ秒で設定します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>milliSecond:Integer</th>
+                        <td>アニメーションの間隔(ミリ秒)</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.setSpeed( 100 );
+</pre>
+
+                <h3>getFPS():Integer</h3>
+                <p>現在設定されているアニメーションの早さを秒間フレーム数で返します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Default</th>
+                        <td>30</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.getFPS(); // 30
+</pre>
+
+                <h3>setFPS( fps:Integer )</h3>
+                <p>アニメーションの早さを秒間フレーム数で設定します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>fps:Integer</th>
+                        <td>アニメーションの秒間フレーム数</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.setSpeed( 100 );
+</pre>
+
+                <h3>getLoop():Boolean</h3>
+                <p>ループ再生するかどうかを示す真偽値を返します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Default</th>
+                        <td>true</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.getLoop(); // true
+</pre>
+
+                <h3>setLoop( value:Boolean )</h3>
+                <p>ループ再生するかどうかを設定します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>value:Boolean</th>
+                        <td>ループ再生するかどうかを示す真偽値</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.setLoop( false );
+</pre>
+
+                <h3>getTotalFrames():Integer</h3>
+                <p>総フレーム数を返します<br>特に後から設定を変えない限りは初期化時の値を返します</p>
+<pre class="prettyprint linenums">
+var flipbook = new Flipbook( 'screen', 20 );
+flipbook.getTotalFrames(); // 20
+flipbook.setTotalFrames( 10 );
+flipbook.getTotalFrames(); // 10
+</pre>
+
+                <h3>setTotalFrames( num:Integer )</h3>
+                <p>総フレーム数を設定します</p>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>num:Integer</th>
+                        <td>総フレーム数</td>
+                    </tr>
+                </table>
+<pre class="prettyprint linenums">
+flipbook.setTotalFrames( 10 );
+</pre>
+
+                <h3>getCurrentFrame():Integer</h3>
+                <p>現在のフレーム数を返します。最初のフレームを0とします</p>
+<pre class="prettyprint linenums">
+flipbook.getCurrentFrame(); // 0
+</pre>
+
+                <h3>isPlaying():Boolean</h3>
+                <p>現在再生中であるかを真偽値で返します</p>
+<pre class="prettyprint linenums">
+flipbook.isPlaying(); // false;
+</pre>
+
+                <h3>isReverse():Boolean</h3>
+                <p>逆再生フラグを真偽値で返します</p>
+<pre class="prettyprint linenums">
+flipbook.isReverse(); // false;
+flipbook.reverse();
+flipbook.isReverse(); // true;
+</pre>
+
+            </div>
+
+            <div class="tab-pane" id="methods">
+
+                <h2>メソッド</h2>
+
+                <h3>play()</h3>
+                <p>アニメーションを再生します。一時停止中はそのフレームから再生します</p>
+<pre class="prettyprint linenums">
+flipbook.play();
+</pre>
+
+                <h3>reverse()</h3>
+                <p>アニメーションを逆再生します。一時停止中はそのフレームから逆再生します</p>
+<pre class="prettyprint linenums">
+flipbook.reverse();
+</pre>
+
+                <h3>replay()</h3>
+                <p>アニメーションを最初から再生します。逆再生(isReverse())が真である場合は最終フレームから逆再生します</p>
+<pre class="prettyprint linenums">
+flipbook.replay();
+</pre>
+
+                <h3>pause()</h3>
+                <p>アニメーションを一時停止します</p>
+<pre class="prettyprint linenums">
+flipbook.pause();
+</pre>
+
+                <h3>stop()</h3>
+                <p>アニメーションを停止。開始フレーム(0)に戻します</p>
+<pre class="prettyprint linenums">
+flipbook.stop();
+</pre>
+
+                <h3>setFrame( frameNumber:Integer )</h3>
+                <p>引数に取ったフレーム番号にジャンプします</p>
+<pre class="prettyprint linenums">
+flipbook.setFrame( 10 );
+filpbook.getCurrentFrame(); // 10
+</pre>
+
+                <h3>setPos( num:Integer )</h3>
+                <p>引数に取ったピクセル数分、スプライトシートの位置をずらします。横アニメーション(direction:0)の場合は縦方向が、縦アニメーション(direction:1)の場合は横方向がその対象となります。setTotalFrames()などと併用し、ひとつのスプライトシートで複数パターンのアニメーションを実現したい場合に使用します</p>
+<pre class="prettyprint linenums">
+flipbook.setPos( -500 );
+</pre>
+
+            </div>
+
+            <div class="tab-pane" id="events">
+
+                <h2>イベント</h2>
+
+                <h3>onFirstFrame</h3>
+                <p>開始フレーム(0)が表示された時に発火します</p>
+<pre class="prettyprint linenums">
+flipbook.onFirstFrame = function( data ){
+    data.type; // 'first_frame'
+    data.frameNumber; // 0
+}
+</pre>
+
+                <h3>onLastFrame</h3>
+                <p>最終フレームが表示された時に発火します</p>
+<pre class="prettyprint linenums">
+flipbook.onLastFrame = function( data ){
+    data.type; // 'last_frame'
+    data.frameNumber; // 19
+}
+</pre>
+
+                <h3>onUpdate</h3>
+                <p>フレームが更新された時に発火します</p>
+<pre class="prettyprint linenums">
+flipbook.onUpdate = function( data ){
+    data.type; // 'update'
+    data.frameNumber; // 10
+}
+</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+</div>
+<!-- /container -->
+
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/google-code-prettify/prettify.js"></script>
+<script src="js/flipbook.min.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

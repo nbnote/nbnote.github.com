@@ -1,0 +1,94 @@
+/**
+ * Modified: 2013.02.16
+ */
+
+body {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+#version {
+    vertical-align: middle;
+}
+
+.masthead h1 {
+    font-size: 24.5px;
+}
+
+.hero-unit {
+    padding: 30px;
+    background-color: #fff;
+}
+
+/* Custom container */
+.container-narrow {
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+pre.prettyprint {
+    margin-bottom: 40px;
+}
+
+#screen {
+    width: 500px;
+    height:250px;
+    margin: 0 auto 20px;
+    background: url(../img/ss.gif) 0 0 no-repeat;
+}
+
+#frameNumber {
+    margin: 15px 0 0;
+    font-size: 83.3%;
+    color: #333;
+    text-align: center;
+}
+
+#control {
+    margin: 15px 0 0;
+}
+
+#control ul{
+    list-style: none;
+}
+
+#btns {
+    width:  302px;
+    height: 50px;
+    margin: 0 auto;
+}
+
+#btns li {
+    float: left;
+}
+#pat3Btn {
+    margin: 0 5px 0 0;
+}
+
+#btns img {
+    display: block;
+    cursor: pointer;
+}
+
+#loop {
+    position: relative;
+    width: 53px;
+    height: 25px;
+    margin: 0 auto;
+    background: url(../img/ui_loop.png) 0 5px no-repeat;
+}
+
+#loop #knob {
+    display: block;
+    position: absolute;
+    top: 0;
+    /*left: 10px;*/
+    left: 23px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
