@@ -27,7 +27,7 @@
 
     Modal.BOX_MARGIN = 20;
     Modal.event = {
-        MODAL_OPEN: 'modalOpe',
+        MODAL_OPEN: 'modalOpen',
         MODAL_CLOSE: 'modalClose',
         SCENE_CHANGE: 'sceneChange'
     }
